@@ -20,11 +20,17 @@ body {
 }
 
 .container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
     text-align: center;
     background: #fff;
-    padding: 30px;
+    padding: 16px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    gap: 20px;
+    height: auto;
+    border: 1px solid #ccc;
 }
 
 input {
@@ -37,7 +43,6 @@ input {
 
 button {
     background-color: rgb(78, 78, 241);
-    margin-top: 15px;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
@@ -48,16 +53,25 @@ button {
 }
 
 .output {
-    margin-top: 20px;
     word-break: break-word;
     white-space: pre-wrap;
     max-width: 500px;
     text-align: justify;
+    padding: 16px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    min-height: 6px;
+    border: 1px solid #ccc;
 }
 
 .input-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 300px;
     margin: 0 auto;
+    gap: 20px;
 }
 
 input, button {
