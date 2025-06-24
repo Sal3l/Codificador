@@ -153,7 +153,131 @@ function code() {
 
   }
 
-  document.getElementById("output").innerText = encrypted
+  document.getElementById("outputText").innerText = encrypted
 
 };
 
+
+
+
+
+
+
+function decode() {
+
+  const text = document.getElementById("inputCode").value;
+  const txLength = text.length;
+
+  let originalReverse = (text.slice(0, text.indexOf("*"))).split("").reverse().join("");
+  let originalTxLength = parseInt(originalReverse, 4);
+  const original = Array(originalTxLength).fill("-!-");
+
+  let position = 0;
+  let times = 0;
+  let character = null;
+
+
+  for (let i = 0; i < txLength; i++) {
+
+
+    
+    if (text[i] == "*") {
+
+      let timesList = null;
+
+      for (let j = i; j < txLength && timesList == null; j++) {
+
+        if (text[j] == "?") {
+
+          timesList = text.slice(i + 1, j);
+          i = j - 1;
+          timesList = parseFraction(timesList);
+
+        }
+
+      }
+
+      for (let k = 0; k < timesList.length; k++) { times += timesList[k] * 64; }
+
+    }
+
+
+    else if (text[i] == "?") {
+
+      let charac = null;
+      let controler = true;
+
+      for (let j = i; j < txLength; j++) {
+
+        if (controler && text[j] == "!" || text[j] == "<" || text[j] == ">" || text[j] == "/" || text[j] == "\\") {
+          charac = text.slice(i + 1, j);
+          controler = false;
+          i = j - 1;
+        }
+
+        if (!controler) {
+
+          j = txLength
+
+        }
+
+      }
+
+      const binary = parseInt(charac).toString(2).padStart(8, 0);
+      const originalBinary = binary.replace(/0/g, 2).replace(/1/g, 0).replace(/2/g, 1);
+      const converted = parseInt(originalBinary, 2);
+      character = String.fromCharCode(converted);
+
+    }
+
+
+    else if (text[i] == "!") {
+
+      original[position] = character
+      times -= 1;
+
+    }
+
+    else if (text[i] == "<") { position += 1; }
+
+    else if (text[i] == ">") { position -= 1; }
+
+    else if (text[i] == "/") { position += 10; }
+
+    else if (text[i] == "\\") { position -= 10; }
+
+  }
+
+  const originalString = original.join("");
+
+  document.getElementById("outputCode").innerText = originalString;
+
+}
+
+
+
+
+function parseFraction(example) {
+
+  const fractions = example.split("+");
+
+  for (let i = 0; i < fractions.length; i++) {
+
+    parts = fractions[i].split("/");
+
+    if (parts.length == 2) {
+
+      const numerator = parts[0];
+      const denominator = parts[1]
+
+      fractions[i] = numerator / denominator;
+
+    }
+
+    else { console.warn("ERRO, Avise o criador!"); }
+
+  }
+
+  return fractions
+
+}
